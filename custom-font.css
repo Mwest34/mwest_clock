@@ -1,0 +1,16 @@
+.custom-font{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:12px;border:1px solid #2c4564;border-radius:10px;background:#101b2a}
+.custom-font-head{grid-column:1/-1;display:flex;justify-content:space-between;align-items:center;font-size:10px;letter-spacing:.1em}
+.custom-font-head a{color:#65c7ff;text-decoration:none}
+.custom-font p{grid-column:1/-1;margin:0;color:var(--muted);font-size:10px;line-height:1.5}
+.custom-font.hidden,#presetFontWrap.hidden{display:none}
+.font-upload-help{margin:0;color:var(--muted);font-size:11px;line-height:1.55}
+.font-upload-button{display:block;text-align:center;color:#fff;background:linear-gradient(90deg,#1679c9,#843fd5);border:0}
+.font-list{max-height:310px;overflow:auto;border:1px solid #28324a;border-radius:10px;background:#0b0f19;scrollbar-color:#3c4964 transparent}
+.font-list button{display:block;width:100%;padding:11px 13px;border:0;border-bottom:1px solid #20283a;border-radius:0;background:transparent;text-align:left;font-size:16px;font-weight:400;letter-spacing:0}
+.font-list button:hover,.font-list button.selected{background:#17304d;color:#8bd2ff}
+.font-list button:last-child{border-bottom:0}
+.font-empty{padding:16px;color:var(--muted);font-size:11px;line-height:1.5}
+.item-row{grid-template-columns:34px 1fr 96px 31px}
+.order-buttons{display:grid;gap:3px}
+.order-buttons button{padding:3px 5px;min-height:22px;font-size:9px;border-radius:5px}
+.order-buttons button:disabled{opacity:.25;cursor:not-allowed}
