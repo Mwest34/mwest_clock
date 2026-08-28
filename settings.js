@@ -5,7 +5,7 @@ let installedFonts=loadFontCache();
 const $=id=>document.getElementById(id);
 function clone(x){return JSON.parse(JSON.stringify(x))}
 function merge(raw){const d=clone(DEFAULTS);if(!raw)return d;Object.assign(d,raw);d.shadow=Object.assign(clone(DEFAULTS.shadow),raw.shadow||{});const oldItems=raw.items||{};d.items=clone(DEFAULTS.items);Object.keys(d.items).forEach(k=>Object.assign(d.items[k],oldItems[k]||{}));if(oldItems.location){if(!oldItems.city)Object.assign(d.items.city,oldItems.location);if(!oldItems.state)Object.assign(d.items.state,oldItems.location)}const requested=Array.isArray(raw.order)?raw.order:DEFAULTS.order;d.order=requested.filter(k=>d.items[k]);DEFAULTS.order.forEach(k=>{if(!d.order.includes(k))d.order.push(k)});d.lines=DEFAULTS.lines.map((x,i)=>Object.assign(x,(raw.lines||[])[i]||{}));return d}
-function load(){try{return merge(JSON.parse(localStorage.getItem('mwestClockSettings')))}catch{return clone(DEFAULTS)}}
+function load(){try{const params=new URLSearchParams(location.search);if(params.get('reset')==='1'){localStorage.removeItem('mwestClockSettings');localStorage.removeItem('mwestInstalledFonts');history.replaceState({},'',location.pathname);return clone(DEFAULTS)}return merge(JSON.parse(localStorage.getItem('mwestClockSettings')))}catch{return clone(DEFAULTS)}}
 function encode(obj){const bytes=new TextEncoder().encode(JSON.stringify(obj));let s='';bytes.forEach(b=>s+=String.fromCharCode(b));return btoa(s).replaceAll('+','-').replaceAll('/','_').replaceAll('=','')}
 function overlayUrl(){return new URL('overlay.html?c='+encode(state),location.href).href}
 function loadFontCache(){try{return JSON.parse(localStorage.getItem('mwestInstalledFonts')||'[]')}catch{return[]}}
