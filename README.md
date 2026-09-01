@@ -21,7 +21,7 @@ Build your clock on the settings page, click **Copy OBS URL**, and paste the gen
 - Independent size, weight, color, opacity, alignment, transform, and letter spacing for every line
 - Custom separators and line spacing
 - Custom drop-shadow color, opacity, position, and blur
-- Included fonts, installed-system font detection, Google Fonts, and uploaded font files
+- Included fonts, installed-system font detection, Google Fonts, and a reusable uploaded-font library
 - English, Spanish, and French settings and clock output
 - Automatic browser-language detection
 - Export and import settings
@@ -93,7 +93,11 @@ Installed-font scanning requires a compatible desktop browser such as Chrome or 
 1. Download and unzip the font.
 2. Select the actual `.ttf`, `.otf`, `.woff`, or `.woff2` file.
 3. Upload it on the settings page.
-4. Copy the updated OBS URL.
+4. The font is saved in your browser’s custom-font library and marked with a **★**.
+5. Switch to another font and return to the uploaded font later without uploading it again.
+6. Copy the updated OBS URL.
+
+Only the currently selected uploaded font is included in the OBS URL. Use **Remove Uploaded Font** to delete the selected font from your saved library without resetting the rest of the clock.
 
 Only upload fonts you have permission to use. Uploaded font data is stored inside the generated URL fragment so GitHub does not receive or store the font file.
 
