@@ -19,6 +19,7 @@ Build your clock on the settings page, click **Copy OBS URL**, and paste the gen
 - Reorder time, date, city, state, and weather
 - One, two, three, or four-line layouts
 - Independent size, weight, color, opacity, alignment, transform, and letter spacing for every line
+- Optional individual color overrides for time, date, city, state, and weather
 - Custom separators and line spacing
 - Custom drop-shadow color, opacity, position, and blur
 - Included fonts, installed-system font detection, Google Fonts, and a reusable uploaded-font library
@@ -48,6 +49,10 @@ Use the **Language** dropdown at the top of the settings page:
 - **Français**
 
 The selection immediately updates the settings page, date and time localization, and weather description in the preview. The copied OBS URL carries the selected language into OBS.
+
+## Item colors
+
+Line colors remain the default. Open **Item Colors** to optionally give Time, Date, City, State, or Weather its own color—even when every item is displayed on one long line. Turn an item’s custom color off to make it follow the line color again. Separators continue using the line color.
 
 ## Date formats
 
