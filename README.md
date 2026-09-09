@@ -1,165 +1,146 @@
 # Mwest Clock
 
-A customizable clock, date, location, and weather overlay for OBS Studio. It runs as a browser source through GitHub Pages—no local server, `.bat` file, Streamer.bot connection, or weather API key required.
+A customizable clock, date, location, and weather overlay for OBS Studio. It runs through GitHub Pages—no local server, `.bat` file, Streamer.bot connection, or weather API key required.
 
 ## Open the clock
 
 ### [Open the Mwest Clock Settings Page](https://mwest34.github.io/mwest_clock/)
 
-Build your clock on the settings page, click **Copy OBS URL**, and paste the generated URL into an OBS Browser Source.
+Choose your settings, click **Save Settings**, click **Copy OBS URL**, and paste the generated URL into an OBS Browser Source.
 
 ## Features
 
-- Local 12-hour or 24-hour time
-- Optional seconds
+- Local 12-hour or 24-hour time with optional seconds
 - Free-form date formats
+- Broad date/time locale support, including Arabic, Chinese, French, German, Hindi, Japanese, Korean, Spanish, and many more
+- English, Spanish, and French settings-interface translations
 - ZIP-code weather with Fahrenheit or Celsius
 - Weather icons and optional condition text
 - City and state displayed together or separately
 - Reorder time, date, city, state, and weather
 - One, two, three, or four-line layouts
-- Independent size, weight, color, opacity, alignment, transform, and letter spacing for every line
-- Optional individual color overrides for time, date, city, state, and weather
-- Custom separators and line spacing
-- Custom drop-shadow color, opacity, position, and blur
-- Included fonts, installed-system font detection, Google Fonts, and a reusable uploaded-font library
-- English, Spanish, and French settings and clock output
-- Automatic browser-language detection
-- Export and import settings
-- One-click reset and recovery
+- Independent styling for every line
+- Optional individual colors for time, date, city, state, and weather
+- Installed Windows font detection
+- Custom drop shadow
+- Explicit Save Settings and Copy OBS URL workflow
+- Export, import, reset, and recovery
+
+## Recommended setup order
+
+1. Choose a language.
+2. Install or select a font.
+3. Arrange the content and layout.
+4. Set optional individual item colors.
+5. Configure time and date.
+6. Configure location and weather.
+7. Style each line.
+8. Configure shadow and appearance.
+9. Click **Save Settings**.
+10. Click **Copy OBS URL**.
 
 ## Add it to OBS
 
 1. Open the [settings page](https://mwest34.github.io/mwest_clock/).
 2. Customize the clock while watching the live preview.
-3. Click **Copy OBS URL**.
-4. In OBS, add a new **Browser Source**.
-5. Paste the copied URL.
-6. Set the Browser Source to **1920 × 1080**, then position or crop the clock as needed.
+3. Click **Save Settings**.
+4. Click **Copy OBS URL**.
+5. Add a new **Browser Source** in OBS.
+6. Paste the copied URL.
+7. Set the source to **1920 × 1080**, then position or crop it as needed.
 
-When you change settings later, copy the newly generated OBS URL and replace the previous URL in OBS.
+After making changes later, save again and replace the URL in OBS.
 
 ## Languages
 
-Use the **Language** dropdown at the top of the settings page:
+The Language dropdown includes Automatic plus 31 selectable languages comparable to the reference clock. All listed languages localize supported browser date and time output.
 
-- **Automatic** follows the browser’s preferred language when supported.
-- **English**
-- **Español**
-- **Français**
+The full settings interface is currently translated into:
 
-The selection immediately updates the settings page, date and time localization, and weather description in the preview. The copied OBS URL carries the selected language into OBS.
+- English
+- Spanish
+- French
 
-## Item colors
-
-Line colors remain the default. Open **Item Colors** to optionally give Time, Date, City, State, or Weather its own color—even when every item is displayed on one long line. Turn an item’s custom color off to make it follow the line color again. Separators continue using the line color.
-
-## Date formats
-
-The Date Format box accepts free-form combinations of these tokens:
-
-| Token | Meaning | Example |
-|---|---|---|
-| `M` | Month number | 8 |
-| `MM` | Two-digit month | 08 |
-| `MMM` | Short month name | Aug |
-| `MMMM` | Full month name | August |
-| `D` | Day number | 28 |
-| `DD` | Two-digit day | 28 |
-| `ddd` | Short weekday | Fri |
-| `dddd` | Full weekday | Friday |
-| `YY` | Two-digit year | 26 |
-| `YYYY` | Four-digit year | 2026 |
-
-Examples:
-
-- `MM/DD/YY` → 08/28/26
-- `MM/DD/YYYY` → 08/28/2026
-- `DD/MM/YYYY` → 28/08/2026
-- `YYYY-MM-DD` → 2026-08-28
-- `dddd, MMMM D, YYYY` → Friday, August 28, 2026
-
-Month and weekday names follow the selected language.
+When another output language is selected, settings controls remain in English. Weather descriptions are localized in English, Spanish, and French; other languages currently retain English weather descriptions.
 
 ## Fonts
 
-### Installed fonts
+For reliable OBS behavior, fonts must be installed on the same computer running OBS. The clock no longer places entire font files inside the URL because extremely long URLs may be truncated by OBS.
 
-1. Install the font in Windows. **Install for all users** is recommended.
-2. Completely restart Chrome or Edge.
-3. Click **Check Installed Fonts**.
-4. Allow font access when prompted.
-5. Search using the font’s internal family name. For example, a downloaded Pokémon font may appear as **Pokemon Solid** or **Pokemon Hollow**.
+1. Click **Open Windows Fonts** to review installed fonts.
+2. Use **Download More Fonts** if needed. Third-party font licenses vary.
+3. Download and extract the font.
+4. Right-click the actual `.ttf` or `.otf` file and choose **Install for all users**.
+5. Completely restart Chrome or Edge and OBS.
+6. Click **Refresh Installed Fonts**.
+7. Search for and select the font.
+8. Save settings before copying the OBS URL.
 
-Installed-font scanning requires a compatible desktop browser such as Chrome or Edge. OBS may not have direct access to every Windows font, so uploading the font file is more reliable.
+Anyone using a shared URL must also have that font installed. If the font is unavailable, the clock uses a fallback font.
 
-### Upload a font
+## Item colors
 
-1. Download and unzip the font.
-2. Select the actual `.ttf`, `.otf`, `.woff`, or `.woff2` file.
-3. Upload it on the settings page.
-4. The font is saved in your browser’s custom-font library and marked with a **★**.
-5. Switch to another font and return to the uploaded font later without uploading it again.
-6. Copy the updated OBS URL.
+Line colors remain the default. Open **Item Colors** to optionally give Time, Date, City, State, or Weather its own color—even when everything is displayed on one long line. Turn an item’s custom color off to make it follow the line color again. Separators continue using the line color.
 
-Only the currently selected uploaded font is included in the OBS URL. Use **Remove Uploaded Font** to delete the selected font from your saved library without resetting the rest of the clock.
+## Date formats
 
-Only upload fonts you have permission to use. Uploaded font data is stored inside the generated URL fragment so GitHub does not receive or store the font file.
+The Date Format box supports:
 
-### Google Fonts
+| Token | Meaning | Example |
+|---|---|---|
+| `M` | Month number | 9 |
+| `MM` | Two-digit month | 09 |
+| `MMM` | Short month name | Sep |
+| `MMMM` | Full month name | September |
+| `D` | Day number | 9 |
+| `DD` | Two-digit day | 09 |
+| `ddd` | Short weekday | Wed |
+| `dddd` | Full weekday | Wednesday |
+| `YY` | Two-digit year | 26 |
+| `YYYY` | Four-digit year | 2026 |
 
-Choose **Use my custom font**, enter the exact font-family name, and paste its Google Fonts stylesheet link.
+Examples include `MM/DD/YY`, `MM/DD/YYYY`, `DD/MM/YYYY`, `YYYY-MM-DD`, and `dddd, MMMM D, YYYY`.
 
 ## Weather
 
-Weather is based on the selected U.S. ZIP code. The clock resolves the ZIP code through Zippopotam.us and loads current conditions through Open-Meteo.
+Weather is based on a U.S. ZIP code through Zippopotam.us and Open-Meteo.
 
 - No API key is required.
-- Choose Fahrenheit or Celsius.
+- Fahrenheit and Celsius are supported.
 - Refresh every 10, 15, 30, or 60 minutes.
-- Weather requests are lightweight and should have no noticeable effect on streaming performance.
+- Weather requests are lightweight.
 
-## Saving and sharing settings
+## Saving and sharing
 
-Clock settings are encoded in the copied OBS URL. This makes each URL portable and avoids requiring an account or background program.
-
+- **Save Settings** locks in the current configuration for the next copied URL.
+- **Copy OBS URL** copies only the last saved configuration.
 - **Export** downloads a JSON backup.
-- **Import** restores a JSON backup.
-- **Reset** clears saved clock settings, restores defaults, and reloads the preview.
-
-Do not publicly share an OBS URL that contains an uploaded commercial font unless its license permits redistribution.
+- **Import** loads a JSON backup.
+- **Reset** restores and saves the defaults.
 
 ## Troubleshooting
 
-### The preview says “URI Too Long”
+### A newly installed font is missing
 
-Current clock links store configuration after `#`, preventing GitHub from receiving the long settings data. Refresh the settings page with **Ctrl + F5** and create a new OBS URL.
+Install it for all users, completely restart Chrome or Edge and OBS, click **Refresh Installed Fonts**, and search for the font’s internal family name.
+
+### The preview and OBS look different
+
+Click **Save Settings**, copy the new OBS URL, replace the existing URL in OBS, and select **Refresh cache of current page**.
 
 ### The clock or preview is stuck
 
-Use the Reset button or open the recovery link:
+Use Reset or open the recovery link:
 
 [Reset and restore Mwest Clock](https://mwest34.github.io/mwest_clock/?reset=1)
 
-This clears the saved browser settings and restores the default clock.
-
-### A newly installed font is missing
-
-Restart Chrome or Edge, click **Check Installed Fonts**, approve font access, and search for the font’s internal family name.
-
-### OBS still shows old settings
-
-Copy the newest OBS URL, replace the old URL in the Browser Source, and click **Refresh cache of current page** in OBS.
-
 ### Weather is unavailable
 
-Confirm the ZIP code, click **Test ZIP & Weather**, and verify that the streaming computer has internet access. The clock continues running if a weather request temporarily fails.
+Confirm the ZIP code, click **Test ZIP & Weather**, and verify that the streaming computer has internet access. The clock continues running during temporary weather failures.
 
 ## Hosting
-
-The project is hosted free through GitHub Pages:
 
 - Settings: https://mwest34.github.io/mwest_clock/
 - Repository: https://github.com/Mwest34/mwest_clock
 
-The hosted clock does not require an open settings window or any additional program running in the background.
+The settings page does not need to remain open while OBS is using the clock.
