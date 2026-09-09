@@ -7,3 +7,6 @@
 .clock-item.time{color:var(--item-time-color,inherit)}.clock-item.date{color:var(--item-date-color,inherit)}.clock-item.city{color:var(--item-city-color,inherit)}.clock-item.state{color:var(--item-state-color,inherit)}.clock-item.weather{color:var(--item-weather-color,inherit)}
 
 .language-note,.font-warning{margin:10px 0 0;color:var(--muted);font-size:10px;line-height:1.55}.font-warning{padding:10px;border-left:3px solid var(--blue);background:#101a25}.font-action-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}.font-action-grid .button{display:flex;align-items:center;justify-content:center;text-align:center;text-decoration:none}.url-zone{gap:8px;flex-wrap:wrap}.url-zone #copyStatus{flex-basis:100%;text-align:center}.url-zone #saveBtn{border-color:var(--teal);color:var(--teal)}@media(max-width:520px){.font-action-grid{grid-template-columns:1fr}}
+
+/* Keep the primary clock actions comfortably separated. */
+.url-zone{display:flex;align-items:center;justify-content:center;column-gap:12px;row-gap:4px;flex-wrap:wrap}
