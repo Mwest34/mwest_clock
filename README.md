@@ -65,7 +65,7 @@ When another output language is selected, settings controls remain in English. W
 
 ## Fonts
 
-For reliable OBS behavior, fonts must be installed on the same computer running OBS. The clock no longer places entire font files inside the URL because extremely long URLs may be truncated by OBS.
+For reliable OBS behavior, fonts must be installed on the same computer running OBS. Selecting an installed font does not embed its file in the URL. Legacy URLs and imports containing embedded fonts remain supported; those URLs can still be extremely long and may be truncated by OBS.
 
 1. Click **Open Windows Fonts** to review installed fonts.
 2. Use **Download More Fonts** if needed. Third-party font licenses vary.
@@ -116,7 +116,7 @@ Weather is based on a U.S. ZIP code through Zippopotam.us and Open-Meteo.
 - **Copy OBS URL** copies only the last saved configuration.
 - **Export** downloads a JSON backup.
 - **Import** loads a JSON backup.
-- **Reset** restores and saves the defaults.
+- **Reset** discards unsaved changes and reloads your last successfully saved configuration, including a fresh clock preview. It does not erase your customization or save a replacement configuration. Save Settings once before using recovery.
 
 ## Troubleshooting
 
@@ -130,9 +130,9 @@ Click **Save Settings**, copy the new OBS URL, replace the existing URL in OBS, 
 
 ### The clock or preview is stuck
 
-Use Reset or open the recovery link:
+Use Reset to recover your last saved settings, or reopen the settings page with the recovery link. Neither option deletes saved settings:
 
-[Reset and restore Mwest Clock](https://mwest34.github.io/mwest_clock/?reset=1)
+[Recover saved Mwest Clock settings](https://mwest34.github.io/mwest_clock/?reset=1)
 
 ### Weather is unavailable
 
@@ -144,3 +144,8 @@ Confirm the ZIP code, click **Test ZIP & Weather**, and verify that the streamin
 - Repository: https://github.com/Mwest34/mwest_clock
 
 The settings page does not need to remain open while OBS is using the clock.
+
+## Safety regression tests
+
+With Node.js installed, run `node --test tests/phase1.test.cjs` for the assertion-based safety and compatibility tests. Run `node tests/audit-observations.cjs` to repeat the original diagnostic audit scenarios. The latter reports observations, including existing weather issues outside the phase 1 repair scope; it is not a pass/fail suite. Neither command changes application settings or contacts weather services.
+
