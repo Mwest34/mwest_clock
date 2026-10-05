@@ -10,3 +10,11 @@
 
 /* Keep the primary clock actions comfortably separated. */
 .url-zone{display:flex;align-items:center;justify-content:center;column-gap:12px;row-gap:4px;flex-wrap:wrap}
+
+
+/* Translated labels can wrap; RTL settings never reverse clock item order. */
+.topbar{height:auto;min-height:70px}.top-actions{flex-wrap:wrap}.topbar>*{min-width:0}.button,button,label,summary{overflow-wrap:anywhere}.grid2,.line-style-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.item-row{grid-template-columns:34px minmax(0,1fr) 112px}.preview-frame{direction:ltr}.clock-item{unicode-bidi:isolate}.font-warning{border-left:0;border-inline-start:3px solid var(--blue)}html[dir=rtl] .controls{border-right:0;border-left:1px solid var(--line)}
+@media(max-width:900px){.topbar{min-height:112px}.grid2{grid-template-columns:1fr}html[dir=rtl] .controls{border:0}}
+@media(max-width:520px){.topbar{grid-template-columns:1fr;gap:10px;padding:12px}.top-actions{justify-content:center}.url-zone{order:initial;grid-column:auto}.workspace{height:calc(100vh - 220px)}}
+
+.settings-page{display:flex;flex-direction:column}.topbar{flex:none}.workspace{height:auto;min-height:0;flex:1}

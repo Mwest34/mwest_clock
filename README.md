@@ -13,7 +13,6 @@ Choose your settings, click **Save Settings**, click **Copy OBS URL**, and paste
 - Local 12-hour or 24-hour time with optional seconds
 - Free-form date formats
 - Broad date/time locale support, including Arabic, Chinese, French, German, Hindi, Japanese, Korean, Spanish, and many more
-- English, Spanish, and French settings-interface translations
 - ZIP-code weather with Fahrenheit or Celsius
 - Weather icons and optional condition text
 - City and state displayed together or separately
@@ -53,15 +52,7 @@ After making changes later, save again and replace the URL in OBS.
 
 ## Languages
 
-The Language dropdown includes Automatic plus 31 selectable languages comparable to the reference clock. All listed languages localize supported browser date and time output.
-
-The full settings interface is currently translated into:
-
-- English
-- Spanish
-- French
-
-When another output language is selected, settings controls remain in English. Weather descriptions are localized in English, Spanish, and French; other languages currently retain English weather descriptions.
+All 31 languages plus Automatic translate the settings interface, date/time output, and weather descriptions. Automatic uses the browser’s preferred supported language and falls back to English. Arabic and Hebrew use RTL presentation; existing OBS URLs remain compatible. See Complete language support below for the catalog and maintenance details.
 
 ## Fonts
 
@@ -151,5 +142,18 @@ The settings page does not need to remain open while OBS is using the clock.
 
 ## Safety regression tests
 
-With Node.js installed, run `node --test tests/phase1.test.cjs` for the assertion-based safety, compatibility, and weather-concurrency tests. Run `node tests/audit-observations.cjs` to repeat the original diagnostic audit scenarios. The latter reports observations rather than pass/fail assertions. Neither command changes application settings or contacts weather services.
+With Node.js installed, run `node --test tests/*.test.cjs` for the assertion-based safety, compatibility, and weather-concurrency tests. Run `node tests/audit-observations.cjs` to repeat the original diagnostic audit scenarios. The latter reports observations rather than pass/fail assertions. Neither command changes application settings or contacts weather services.
 
+
+
+## Complete language support
+
+All 31 selectable languages translate the settings interface, dynamic controls, help, accessible labels, action messages, and weather descriptions: English, Arabic, Bulgarian, Simplified Chinese, Traditional Chinese, Czech, Danish, Dutch, Finnish, French, German, Greek, Hebrew, Hindi, Hungarian, Indonesian, Italian, Japanese, Korean, Norwegian Bokmål, Polish, Portuguese, Romanian, Russian, Slovak, Spanish, Swedish, Thai, Turkish, Ukrainian, and Vietnamese. Dates and times use the browser’s `Intl` locale data; numeric date-pattern tokens keep their existing behavior.
+
+Automatic chooses the first supported language in your browser’s preferences. Regional preferences such as es-MX, fr-CA, and pt-BR retain their date/time locale. Chinese script/region preferences choose Simplified or Traditional Chinese; unsupported preferences fall back to English. Arabic and Hebrew use a right-to-left settings interface. Clock item order and saved left/center/right alignment remain unchanged. Font glyph coverage and locale data available in the browser or OBS still affect rendering.
+
+`translations.js` contains complete, independently editable dictionaries with stable keys. `i18n.js` resolves locales, substitutes named parameters, and falls back to English for a missing locale or key. Language names use `Intl.DisplayNames`, with translated dictionary names when it is unavailable. Translations and user text are rendered as plain text or escaped before entering generated controls; only the application’s own weather icon markup is HTML. No runtime translation service is used.
+
+Existing language codes, saved configurations, legacy dates/fonts, `#c=` OBS URLs, and legacy `?c=` URLs remain supported. Switching languages immediately updates controls and preview without modifying saved settings until Save Settings. Factory weather defaults remain ZIP 90061, Fahrenheit, and a 30-minute refresh.
+
+Run `node --test tests/*.test.cjs` for the complete language, safety, restore-defaults, compatibility, and weather regression suite. Run `node tests/audit-observations.cjs` for diagnostic scenarios. Syntax-check each JavaScript and test file with `node --check`. Tests use mocked weather and do not change browser settings.
