@@ -157,3 +157,5 @@ Automatic chooses the first supported language in your browser’s preferences. 
 Existing language codes, saved configurations, legacy dates/fonts, `#c=` OBS URLs, and legacy `?c=` URLs remain supported. Switching languages immediately updates controls and preview without modifying saved settings until Save Settings. Factory weather defaults remain ZIP 90061, Fahrenheit, and a 30-minute refresh.
 
 Run `node --test tests/*.test.cjs` for the complete language, safety, restore-defaults, compatibility, and weather regression suite. Run `node tests/audit-observations.cjs` for diagnostic scenarios. Syntax-check each JavaScript and test file with `node --check`. Tests use mocked weather and do not change browser settings.
+
+Preview document URLs and asset links carry a release version so the settings page cannot reuse a previous release’s cached clock HTML. Copy OBS URL retains the established URL format and configuration encoding. Existing browser or OBS tabs may need a refresh to load a new release.
