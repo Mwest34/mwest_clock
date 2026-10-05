@@ -1,5 +1,5 @@
 const DEFAULTS=MwestConfig.defaults;
-let hasSavedState=false,loadWarning='';
+let hasSavedState=false,loadWarning='',restoreDefaultsRequested=false;
 const ITEM_META={time:['◷','Time'],date:['▣','Date'],city:['⌖','City'],state:['◈','State'],weather:['☀','Weather']};
 let state=load(),activeLine=0,previewTimer,previewReload=0;
 let installedFonts=loadFontCache();
@@ -12,7 +12,7 @@ function merge(raw){return MwestConfig.validate(raw)}
 function load(){
  try{
   const params=new URLSearchParams(location.search);
-  if(params.get('reset')==='1'){params.delete('reset');history.replaceState({},'',location.pathname+(params.size?'?'+params:''))}
+  if(params.get('reset')==='1'){restoreDefaultsRequested=true;params.delete('reset');history.replaceState({},'',location.pathname+(params.size?'?'+params:'')+location.hash)}
   const stored=localStorage.getItem('mwestClockSettings');
   if(stored===null)return clone(DEFAULTS);
   const loaded=merge(JSON.parse(stored));hasSavedState=true;return loaded;
@@ -39,7 +39,7 @@ function sendPreview(config){$('preview').contentWindow?.postMessage({type:'mwes
 function syncPreview(config,reload=false){
  clearTimeout(previewTimer);previewTimer=undefined;
  const url=new URL(overlayUrl(config));
- // A distinct document URL forces recovery even when the saved fragment is unchanged.
+ // A distinct document URL reloads the preview even when the configuration is unchanged.
  if(reload)url.searchParams.set('recovery',String(++previewReload));
  $('preview').src=url.href;
  sendPreview(config);
@@ -54,17 +54,19 @@ function commitSettings(){
   $('saveBtn').textContent='SAVED!';setTimeout(()=>$('saveBtn').textContent=MwestI18n.t('SAVE SETTINGS',state.language),1500);
  }catch(err){$('copyStatus').textContent=MwestI18n.t('Settings could not be saved. Your previous saved settings were kept.',state.language)}
 }
-function recoverSettings(){
- if(!hasSavedState){$('copyStatus').textContent=MwestI18n.t('No saved configuration is available. Save your settings first.',state.language);return}
+function restoreDefaults(){
+ const defaults=merge(DEFAULTS);
  clearTimeout(previewTimer);previewTimer=undefined;
- state=clone(savedState);isDirty=false;hydrate();syncPreview(savedState,true);
- $('weatherStatus').textContent=MwestI18n.t('Last saved settings restored.',state.language);
- $('copyStatus').textContent=MwestI18n.t('Last saved settings restored.',state.language);
+ state=defaults;isDirty=true;activeLine=0;$('fontSearch').value='';
+ document.querySelectorAll('.mode').forEach(b=>b.classList.toggle('active',b.dataset.preset==='stacked'));
+ hydrate();syncPreview(state,true);
+ const message=MwestI18n.t('Default settings loaded — click Save Settings to keep them.',state.language);
+ $('weatherStatus').textContent=message;$('copyStatus').textContent=message;
 }
 function save(){isDirty=true;$('copyStatus').textContent='Unsaved changes — click Save Settings';outputs();clearTimeout(previewTimer);previewTimer=setTimeout(()=>{previewTimer=undefined;const frame=$('preview');if(!frame.src)frame.src=overlayUrl(state);else sendPreview(state)},80)}
 function setPreset(name){document.querySelectorAll('.mode').forEach(b=>b.classList.toggle('active',b.dataset.preset===name));if(name==='single'){Object.values(state.items).forEach(x=>{if(x.enabled)x.line=1})}if(name==='stacked'){state.items.time.line=1;['date','city','state','weather'].forEach(k=>state.items[k].line=2)}if(name==='three'){state.items.time.line=1;state.items.date.line=2;['city','state','weather'].forEach(k=>state.items[k].line=3)}if(name==='four'){state.items.time.line=1;state.items.date.line=2;state.items.city.line=3;state.items.state.line=3;state.items.weather.line=4}renderItems();save()}
 document.addEventListener('input',e=>{const t=e.target;if(t.id==='importFile')return;if(t.dataset.itemColorEnabled){state.itemColors[t.dataset.itemColorEnabled].enabled=t.checked;renderItemColors();applyUiLanguage();save();return}if(t.dataset.itemColor){state.itemColors[t.dataset.itemColor].color=t.value;save();return}if(t.dataset.itemEnabled){state.items[t.dataset.itemEnabled].enabled=t.checked;save();return}if(t.dataset.itemLine){state.items[t.dataset.itemLine].line=Number(t.value);save();return}if(t.dataset.lineProp){let v=t.value;if(['size','weight','opacity','letterSpacing'].includes(t.dataset.lineProp))v=Number(v);state.lines[activeLine][t.dataset.lineProp]=v;if(t.type==='range'&&t.previousElementSibling)t.previousElementSibling.textContent=v+(t.dataset.lineProp==='opacity'?'%':'px');save();return}const id=t.id;if(['showSeconds','weatherIcon','conditionText'].includes(id))state[id]=t.checked;else if(id==='hour12')state[id]=t.value==='true';else if(id==='refresh'||id==='lineGap')state[id]=Number(t.value);else if(id.startsWith('shadow'))state.shadow[id.slice(6).toLowerCase()]=id==='shadowColor'?t.value:Number(t.value);else if(id in state)state[id]=t.value;if(id==='dateFormat')state.legacyDateStyle=false;if(id==='fontPreset')updateFontPanels();if(id==='language'){renderItems();renderItemColors();renderTabs();applyUiLanguage()}save()});
-document.addEventListener('click',async e=>{const b=e.target.closest('button');if(!b)return;if(b.dataset.preset){setPreset(b.dataset.preset);return}if(b.dataset.lineTab){activeLine=Number(b.dataset.lineTab);renderTabs();return}if(b.dataset.size){document.querySelectorAll('[data-size]').forEach(x=>x.classList.toggle('active',x===b));$('previewFrame').className='preview-frame '+b.dataset.size;return}if(b.id==='saveBtn'){commitSettings();return}if(b.id==='copyUrl'){if(isDirty){$('copyStatus').textContent='Please click Save Settings before copying';return}try{await navigator.clipboard.writeText(overlayUrl(savedState));$('copyUrl').textContent='URL COPIED!';setTimeout(()=>$('copyUrl').textContent='COPY OBS URL',1800)}catch{prompt('Copy this OBS URL:',overlayUrl(savedState))}return}if(b.id==='resetBtn'){if(confirm(MwestI18n.t('Restore the last saved settings and discard unsaved changes?',state.language)))recoverSettings();return}if(b.id==='exportBtn'){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(state,null,2)],{type:'application/json'}));a.download='mwest-clock-settings.json';a.click();URL.revokeObjectURL(a.href)}if(b.id==='testLocation'){testWeather()}});
+document.addEventListener('click',async e=>{const b=e.target.closest('button');if(!b)return;if(b.dataset.preset){setPreset(b.dataset.preset);return}if(b.dataset.lineTab){activeLine=Number(b.dataset.lineTab);renderTabs();return}if(b.dataset.size){document.querySelectorAll('[data-size]').forEach(x=>x.classList.toggle('active',x===b));$('previewFrame').className='preview-frame '+b.dataset.size;return}if(b.id==='saveBtn'){commitSettings();return}if(b.id==='copyUrl'){if(isDirty){$('copyStatus').textContent='Please click Save Settings before copying';return}try{await navigator.clipboard.writeText(overlayUrl(savedState));$('copyUrl').textContent='URL COPIED!';setTimeout(()=>$('copyUrl').textContent='COPY OBS URL',1800)}catch{prompt('Copy this OBS URL:',overlayUrl(savedState))}return}if(b.id==='resetBtn'){if(confirm(MwestI18n.t('Load the original clock settings? Your saved configuration will remain protected until you click Save Settings.',state.language)))restoreDefaults();return}if(b.id==='exportBtn'){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(state,null,2)],{type:'application/json'}));a.download='mwest-clock-settings.json';a.click();URL.revokeObjectURL(a.href)}if(b.id==='testLocation'){testWeather()}});
 $('items').addEventListener('click',e=>{const b=e.target.closest('[data-move]');if(!b)return;const from=state.order.indexOf(b.dataset.itemKey),to=from+Number(b.dataset.move);if(from<0||to<0||to>=state.order.length)return;[state.order[from],state.order[to]]=[state.order[to],state.order[from]];renderItems();renderItemColors();applyUiLanguage();save()});
 $('locationFormat').addEventListener('change',e=>{state.items.city.enabled=e.target.value!=='state';state.items.state.enabled=e.target.value!=='city';renderItems()});
 $('fontSearch').addEventListener('input',e=>renderFontList(e.target.value));
@@ -81,5 +83,5 @@ $('importFile').addEventListener('change',async e=>{
 });
 
 async function testWeather(){const status=$('weatherStatus');status.textContent='Checking ZIP and current weather…';try{const z=await fetch(`https://api.zippopotam.us/us/${state.zip}`).then(r=>{if(!r.ok)throw Error('ZIP not found');return r.json()});const p=z.places[0];const url=`https://api.open-meteo.com/v1/forecast?latitude=${p.latitude}&longitude=${p.longitude}&current=temperature_2m,weather_code&temperature_unit=${state.unit}&timezone=auto`;const w=await fetch(url).then(r=>r.json());status.textContent=`Connected: ${p['place name']}, ${p['state abbreviation']} • ${Math.round(w.current.temperature_2m)}${w.current_units.temperature_2m}`}catch(err){status.textContent=`Could not load weather: ${err.message}`}}
-hydrate();$('preview').addEventListener('load',()=>sendPreview(state));$('preview').src=overlayUrl();if(loadWarning)$('copyStatus').textContent=loadWarning;testWeather();
+hydrate();$('preview').addEventListener('load',()=>sendPreview(state));if(restoreDefaultsRequested)restoreDefaults();else{$('preview').src=overlayUrl();if(loadWarning)$('copyStatus').textContent=loadWarning}testWeather();
 

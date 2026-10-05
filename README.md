@@ -24,7 +24,7 @@ Choose your settings, click **Save Settings**, click **Copy OBS URL**, and paste
 - Installed Windows font detection
 - Custom drop shadow
 - Explicit Save Settings and Copy OBS URL workflow
-- Export, import, reset, and recovery
+- Export, import, and Restore Defaults
 
 ## Recommended setup order
 
@@ -116,7 +116,7 @@ Weather is based on a U.S. ZIP code through Zippopotam.us and Open-Meteo.
 - **Copy OBS URL** copies only the last saved configuration.
 - **Export** downloads a JSON backup.
 - **Import** loads a JSON backup.
-- **Reset** discards unsaved changes and reloads your last successfully saved configuration, including a fresh clock preview. It does not erase your customization or save a replacement configuration. Save Settings once before using recovery.
+- **Restore Defaults** loads the original factory configuration into an unsaved draft and immediately refreshes the controls and preview. Your previous saved settings stay protected until you click **Save Settings**. Copy OBS URL is blocked while this draft is unsaved. Closing or refreshing the page before saving reloads your previous saved configuration.
 
 ## Troubleshooting
 
@@ -130,9 +130,9 @@ Click **Save Settings**, copy the new OBS URL, replace the existing URL in OBS, 
 
 ### The clock or preview is stuck
 
-Use Reset to recover your last saved settings, or reopen the settings page with the recovery link. Neither option deletes saved settings:
+Use **Restore Defaults** to load a clean factory draft, or use the `?reset=1` recovery link below. Neither action overwrites saved settings automatically. The link removes its reset flag after loading, so refreshing before Save Settings reloads your previous saved configuration. Click **Save Settings** only when you want to keep the defaults:
 
-[Recover saved Mwest Clock settings](https://mwest34.github.io/mwest_clock/?reset=1)
+[Load a clean factory draft](https://mwest34.github.io/mwest_clock/?reset=1)
 
 ### Weather is unavailable
 
