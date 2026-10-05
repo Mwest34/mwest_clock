@@ -109,6 +109,10 @@ Weather is based on a U.S. ZIP code through Zippopotam.us and Open-Meteo.
 - Fahrenheit and Celsius are supported.
 - Refresh every 10, 15, 30, or 60 minutes.
 - Weather requests are lightweight.
+- The clock waits for verified weather data instead of briefly showing a fake location or condition.
+- ZIP or temperature-unit changes cancel older requests, so a late response cannot replace newer weather.
+- Appearance-only changes reuse the current weather instead of contacting the weather services again.
+- Weather requests time out safely after 12 seconds. The clock and date continue running if either service is unavailable or returns invalid data.
 
 ## Saving and sharing
 
@@ -147,5 +151,5 @@ The settings page does not need to remain open while OBS is using the clock.
 
 ## Safety regression tests
 
-With Node.js installed, run `node --test tests/phase1.test.cjs` for the assertion-based safety and compatibility tests. Run `node tests/audit-observations.cjs` to repeat the original diagnostic audit scenarios. The latter reports observations, including existing weather issues outside the phase 1 repair scope; it is not a pass/fail suite. Neither command changes application settings or contacts weather services.
+With Node.js installed, run `node --test tests/phase1.test.cjs` for the assertion-based safety, compatibility, and weather-concurrency tests. Run `node tests/audit-observations.cjs` to repeat the original diagnostic audit scenarios. The latter reports observations rather than pass/fail assertions. Neither command changes application settings or contacts weather services.
 
