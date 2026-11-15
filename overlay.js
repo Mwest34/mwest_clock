@@ -15,7 +15,11 @@ function itemColor(key){const c=cfg.itemColors?.[key];return c?.enabled&&/^#[0-9
 function render(){document.title=MwestI18n.t('brandClock',cfg.language);document.getElementById('error').textContent=(configError||weatherError)?MwestI18n.t(configError||weatherError,cfg.language):'';document.documentElement.lang=MwestI18n.code(cfg.language);document.documentElement.dir=MwestI18n.direction(cfg.language);const now=new Date(),content={time:formatTime(now),date:formatDate(now),city:cityText(),state:stateText(),weather:weatherHtml()};const root=document.getElementById('clock');applyCustomFont();Object.keys(cfg.itemColors||{}).forEach(k=>root.style.setProperty('--item-'+k+'-color',itemColor(k)));root.style.direction='ltr';root.style.gap=cfg.lineGap+'px';root.style.fontFamily=cfg.fontPreset==='custom'&&cfg.customFontName?`"${MwestConfig.cssString(cfg.customFontName)}", sans-serif`:cfg.fontFamily;const sh=cfg.shadow;root.style.textShadow=`${sh.x}px ${sh.y}px ${sh.blur}px ${rgba(sh.color,sh.opacity)}`;root.innerHTML=[1,2,3,4].map((num,i)=>{const keys=cfg.order.filter(k=>cfg.items[k]?.enabled&&Number(cfg.items[k].line)===num&&content[k]!==''&&!((k==='city'||k==='state')&&!String(content[k]).trim()));if(!keys.length)return'';const l=cfg.lines[i];const justify={left:'flex-start',center:'center',right:'flex-end'}[l.align]||'center';return `<div class="clock-line" style="font-size:${l.size}px;font-weight:${l.weight};color:${l.color};opacity:${l.opacity/100};justify-content:${justify};text-transform:${l.transform};letter-spacing:${l.letterSpacing}px">${keys.map(k=>`<span class="clock-item ${k}" dir="auto">${k==='weather'?content[k]:MwestConfig.escapeText(content[k])}</span>`).join(`<span class="separator">${MwestConfig.escapeText(cfg.separator)}</span>`)}</div>`}).join('')}
 function weatherKey(config=cfg){return config.zip+'|'+config.unit}
 function clearWeather(){place={city:'',state:'',stateLong:'',lat:null,lon:null};weather={temp:null,code:null,unit:null}}
-function scheduleWeather(){clearTimeout(weatherTimer);weatherTimer=setTimeout(updateWeather,Math.max(5,Number(cfg.refresh))*60000)}
+function scheduleWeather(){
+ clearTimeout(weatherTimer);
+ const delay=weatherError?60000:Math.max(5,Number(cfg.refresh))*60000;
+ weatherTimer=setTimeout(updateWeather,delay);
+}
 async function fetchJson(url,signal){const response=await fetch(url,{signal});if(!response.ok)throw Error('Weather request failed');return response.json()}
 async function updateWeather(){
  const request=++weatherRequest,snapshot={zip:cfg.zip,unit:cfg.unit};
@@ -33,7 +37,7 @@ async function updateWeather(){
   weatherError='';place=nextPlace;weather={temp,code,unit:snapshot.unit};document.getElementById('error').textContent=configError?MwestI18n.t(configError,cfg.language):'';render();
  }catch(e){
   if(request!==weatherRequest)return;
-  clearWeather();weatherError='status.weatherUnavailable';render();
+  weatherError='status.weatherUnavailable';render();
  }finally{
   clearTimeout(timeout);if(request===weatherRequest){weatherController=null;scheduleWeather()}
  }
@@ -42,6 +46,6 @@ addEventListener('message',e=>{
  if(window.parent===window||e.origin!==new URL(location.href).origin||e.source!==window.parent||e.data?.type!=='mwest-clock-config')return;
  let next;try{next=normalizeConfig(e.data.config)}catch{return}
  const oldKey=weatherKey();cfg=next;configError='';
- if(weatherKey()!==oldKey){clearWeather();render();updateWeather()}else{render();scheduleWeather()}
+ if(weatherKey()!==oldKey){weatherError='';clearWeather();render();updateWeather()}else{render();scheduleWeather()}
 });render();updateWeather();setInterval(render,1000);
 
